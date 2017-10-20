@@ -32,14 +32,9 @@ SEXP lookup_in_table (SEXP ttable, SEXP xtable, SEXP t) {
   if (ntimes != LENGTH(ttable))
     errorcall(R_NilValue,"in 'lookup_in_table': incommensurate dimensions");
 
-  if (nt > 1) {
-    xdim[0] = nvar; xdim[1] = nt;
-    PROTECT(X = makearray(2,xdim)); nprotect++;
-    setrownames(X,GET_COLNAMES(GET_DIMNAMES(xtable)),2);
-  } else {
-    PROTECT(X = NEW_NUMERIC(nvar)); nprotect++;
-    SET_NAMES(X,GET_COLNAMES(GET_DIMNAMES(xtable)));
-  }
+  xdim[0] = nvar; xdim[1] = nt;
+  PROTECT(X = makearray(2,xdim)); nprotect++;
+  setrownames(X,GET_COLNAMES(GET_DIMNAMES(xtable)),2);
 
   struct lookup_table tab = {ntimes,nvar,0,REAL(ttable),REAL(xtable)};
   for (j = 0, tp = REAL(t), xp = REAL(X); j < nt; j++, tp++, xp += nvar)
